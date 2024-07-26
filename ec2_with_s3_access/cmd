@@ -1,0 +1,3 @@
+$env:AWS_PROFILE = "terraform"
+$env:AWS_CONFIG_FILE = "C:\\Users\\LENOVO\\.aws\\config"
+$env:AWS_SHARED_CREDENTIALS_FILE = "C:\\Users\\LENOVO\\.aws\\credentials"
