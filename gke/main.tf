@@ -46,8 +46,8 @@ resource "google_container_cluster" "primary" {
   # We can't create a cluster with no node pool defined, but we want to only use
   # separately managed node pools. So we create the smallest possible default
   # node pool and immediately delete it.
-  remove_default_node_pool = true
-  initial_node_count       = 1
+  # remove_default_node_pool = true
+  # initial_node_count       = 1
   deletion_protection = false
   network = google_compute_network.vpc.name
   subnetwork = google_compute_subnetwork.subnet.name
@@ -104,8 +104,9 @@ resource "google_container_cluster" "primary" {
           # The maximum number of nodes that can be created beyond the current size of the node pool during the upgrade process
           max_surge = 2
           # The maximum number of nodes that can be simultaneously unavailable during the upgrade process
-          max_unavailable = 2
-        }
+          max_unavailable = 0
+          # 2+0 = 2 nodes can be upgraded at a time
+      }
     }
   }
   # https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-provisioning
@@ -166,23 +167,23 @@ resource "google_container_cluster" "primary" {
 }
 
 # Node Pool
-resource "google_container_node_pool" "primary_preemptible_nodes" {
-  name       = "my-node-pool"
-  location   = "us-central1"
-  cluster    = google_container_cluster.primary.name
-  node_count = 1
+# resource "google_container_node_pool" "primary_preemptible_nodes" {
+#   name       = "my-node-pool"
+#   location   = "us-central1"
+#   cluster    = google_container_cluster.primary.name
+#   node_count = 1
 
-  node_config {
-    preemptible  = true
-    machine_type = "e2-medium"
+#   node_config {
+#     preemptible  = true
+#     machine_type = "e2-medium"
 
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    service_account = google_service_account.default.email
-    oauth_scopes    = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
-  }
-}
+#     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+#     service_account = google_service_account.default.email
+#     oauth_scopes    = [
+#       "https://www.googleapis.com/auth/cloud-platform"
+#     ]
+#   }
+# }
 
 # It is recommended that node pools be created and managed as separate resources as in the example above. 
 # This allows node pools to be added and removed without recreating the cluster. 

@@ -14,6 +14,6 @@ provider "google" {
   # or set GOOGLE_REGION
   zone = var.zone
   # or set GOOGLE_ZONE
-  impersonate_service_account = var.impersonate_service_account
+  # impersonate_service_account = var.impersonate_service_account
   # or set GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
 }
